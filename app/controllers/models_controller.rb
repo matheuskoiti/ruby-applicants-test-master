@@ -1,9 +1,16 @@
 class ModelsController < ApplicationController
+  before_action :populate, only: :index
+
   expose(:make) { Make.by_webmotor_id(params[:webmotors_make_id]) } 
   expose(:models) { Model.by_make_id(make.id) }
   expose(:all_models) { Model.all }
 
   def index
+  end
+
+  private
+
+  def populate
     #search the models
     uri = URI("http://www.webmotors.com.br/carro/modelos")
 
@@ -12,8 +19,6 @@ class ModelsController < ApplicationController
 
     create_models(models_json)
   end
-
-  private
 
   # Itera no resultado e grava os modelos que ainda não estão persistidas
   def create_models(models_json) 

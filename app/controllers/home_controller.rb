@@ -1,7 +1,14 @@
 class HomeController < ApplicationController
+  before_action :populate, only: :index
+
   expose(:makes) { Make.all } 
   
   def index
+  end
+
+  private
+
+  def populate
     #search the make
     uri = URI("http://www.webmotors.com.br/carro/marcas")
 
@@ -12,14 +19,16 @@ class HomeController < ApplicationController
     create_makes(json)
   end
 
-  private
-
   # Itera no resultado e grava as marcas que ainda não estão persistidas
   def create_makes(json)
     json.each do |make_params|
-      if makes.by_name(make_params["Nome"]).size == 0
+      if not_inserted_yet?(make_params["Nome"]) 
         Make.create(name: make_params["Nome"], webmotors_id: make_params["Id"])
       end
     end
+  end
+
+  def not_inserted_yet?(name)
+    makes.by_name(name).size == 0
   end
 end
