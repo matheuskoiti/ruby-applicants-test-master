@@ -22,13 +22,9 @@ class HomeController < ApplicationController
   # Itera no resultado e grava as marcas que ainda não estão persistidas
   def create_makes(json)
     json.each do |make_params|
-      if not_inserted_yet?(make_params["Nome"]) 
+      unless makes.contains?(make_params["Nome"]) 
         Make.create(name: make_params["Nome"], webmotors_id: make_params["Id"])
       end
     end
-  end
-
-  def not_inserted_yet?(name)
-    makes.by_name(name).size == 0
   end
 end

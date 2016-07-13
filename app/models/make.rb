@@ -8,4 +8,8 @@ class Make < ActiveRecord::Base
     where(name: name)
   end
 
+  def self.contains?(name)
+    by_name(name).size != 0
+  end
+
 end
