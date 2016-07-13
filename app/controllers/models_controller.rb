@@ -18,9 +18,13 @@ class ModelsController < ApplicationController
   # Itera no resultado e grava os modelos que ainda não estão persistidas
   def create_models(models_json) 
     models_json.each do |json|
-      if all_models.by_name_and_make_id(json["Nome"], make.id).size == 0
+      if not_inserted_yet?(json["Nome"], make.id) 
         Model.create(make_id: make.id, name: json["Nome"])
       end
     end
+  end
+
+  def not_inserted_yet?(name, make_id)
+    all_models.by_name_and_make_id(name, make_id).size == 0
   end
 end
