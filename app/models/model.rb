@@ -4,4 +4,8 @@ class Model < ActiveRecord::Base
     where(make_id: make_id)
   end
 
+  def self.by_name_and_make_id(name, make_id)
+    where(name: name, make_id: make_id)
+  end
+
 end
